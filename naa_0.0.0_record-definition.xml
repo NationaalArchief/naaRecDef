@@ -36,6 +36,7 @@
     	<namespace prefix="ebucore" uri="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#"/>
     	<namespace prefix="cidoc-crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
     	<namespace prefix="frbr_core" uri="http://purl.org/vocab/frbr/core#"/>
+		<namespace prefix="odrl" uri="http://www.w3.org/ns/odrl/2/"/>
   	</namespaces>
 	<functions>
 		<mapping-function name="createOreAggregationUri">
@@ -265,6 +266,13 @@
 				<string>break;</string>
 				<string>case '%':</string>
 				<string>out.append('')</string>
+				<!--Toevoeging GK 20181018: komma , hekje # en & eruit gestript-->
+				<string>case ',':</string>
+				<string>out.append('')</string>
+				<string>case '#':</string>
+				<string>out.append('')</string>				
+				<string>case '&amp;':</string>
+				<string>out.append('')</string>
 				<string>break;</string>
 				<string>default:</string>
 				<string>out.append(c);</string>
@@ -274,10 +282,80 @@
 				<string>"${identifier}"</string>
 			</groovy-code>
 		</mapping-function>
+		<!-- 20181018 GK Functie toegevoegd om namen te urlifyen zonder dat ze naar kleine letters worden gezet -->
+		<mapping-function name="NA_urilifyNames">
+			<sample-input>
+				<string>kkjhdf lkjj(d)f[l]k.kj'fHaneGra%af</string>
+			</sample-input>
+			<groovy-code>
+				<string>StringBuilder out = new StringBuilder()</string>
+				<string>for (char c : it.toString().chars) {</string>
+				<string>switch (c) {</string>
+				<string>case ' ':</string>
+				<string>out.append('_')</string>
+				<string>break;</string>
+				<string>case '.':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>case ']':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>case '\\':</string>
+				<string>out.append('_')</string>
+				<string>break;</string>
+				<string>case '(':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>case ']':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>case '[':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>case ')':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>case '\'':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>case '%':</string>
+				<string>out.append('')</string>
+				<!--Toevoeging GK 20181018: komma , hekje # en & eruit gestript-->
+				<string>case ',':</string>
+				<string>out.append('')</string>
+				<string>case '#':</string>
+				<string>out.append('')</string>				
+				<string>case '&amp;':</string>
+				<string>out.append('')</string>
+				<string>break;</string>
+				<string>default:</string>
+				<string>out.append(c);</string>
+				<string>}</string>
+				<string>}</string>
+				<string>identifier = out.toString()</string>
+				<string>"${identifier}"</string>
+			</groovy-code>
+		</mapping-function>		
 		<mapping-function name="NA_genereerDataSetUrl">
 			<groovy-code>
 				<string>code = "${spec}"</string>
 				<string>it = "${baseUrl}/doc/Dataset-" + code.substring(0,7)</string>
+			</groovy-code>
+		</mapping-function>
+		<mapping-function name="hyphenateGUID">
+			<sample-input>
+				<string>64ca27d182201d1ce0530518a8c06b96</string>
+			</sample-input>
+			<groovy-code>
+				<string>&quot;${it}&quot;.toLowerCase().replaceAll(&apos;^([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})&apos;, &apos;$1-$2-$3-$4-$5&apos;)</string>
+			</groovy-code>
+		</mapping-function>
+		<mapping-function name="test">
+			<sample-input>
+				<string>64AC27d182201d1ce0530518a8c06b96</string>
+			</sample-input>
+			<groovy-code>
+				<string>&quot;${it}&quot;.toLowerCase().replaceAll(&apos;^([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})&apos;, &apos;$1-$2-$3-$4-$5&apos;)</string>
 			</groovy-code>
 		</mapping-function>
 	</functions>
@@ -295,17 +373,53 @@
 <root tag="naa:RDF">
     <node-mapping inputPath="/input"/>
 
-<!-- ore:Aggregation - niet gebruiken of weghalen -->
+    <!-- ore:Aggregation - -->
     <elem tag="ore:Aggregation">
         <attr tag="rdf:about" uriCheck="true">
-            <node-mapping inputPath="/input">
-                <groovy-code>
-                    <string>"${baseUrl}/resource/aggregation/${spec}/${_uniqueIdentifier.sanitizeURI()}"</string>
-                </groovy-code>
-            </node-mapping>
+            <!--<node-mapping inputPath="/input">-->
+                <!--<groovy-code>-->
+                    <!--<string>"${baseUrl}/resource/aggregation/${spec}/${_uniqueIdentifier.sanitizeURI()}"</string>-->
+                <!--</groovy-code>-->
+            <!--</node-mapping>-->
         </attr>
+		<!-- 20181001 GK gebruiken van ore:aggregation voor fotocollectie als geheel -->
+			<elem tag="naa:isAggregationType" attrs="rdf:resource,xml:lang"/>
+			<!-- Indien mogelijk een label toewijzen -->
+			<elem tag="rdfs:label" attrs="xml:lang"/>
+			<elem tag="skos:prefLabel" attrs="xml:lang"/>
+			<!-- 20181005 GK. Toegevoegd dcat dataset properties -->
+			<elem tag="skos:altLabel" attrs="xml:lang"/>
+			<!-- Titel van de collectie -->
+			<elem tag="dc:title" attrs="xml:lang"/>
+			<!-- 20181005 GK. Toegevoegd dcat dataset properties -->
+			<elem tag="dcterms:description" attrs="rdf:resource,xml:lang"/>
+			<!-- MAIS toegangscode / nummer archiefinventaris / toegangsnummer-->
+			<elem tag="naa:catalogReferenceNumber" attrs="xml:lang"/>
+			<!-- guid MAIS -->
+			<elem tag="dc:identifier" attrs="xml:lang"/>
+			<!-- Mais Handle  -->
+			<elem tag="edm:isShownAt" attrs="rdf:resource"/>
+			<!-- The primary topic of this aggregation, record or document. -->
+			<elem tag="foaf:primaryTopic" attrs="rdf:about"/>
+			<!-- Verwijzing naar hoger aggregatie niveau  -->
+			<elem tag="ore:isAggregatedBy" attrs="rdf:resource"/>
+			<!-- Verwijzing naar genest object (onderdeel van deze aggregatie) -->
+			<elem tag="ore:aggregates" attrs="rdf:resource"/>
+			<!-- Wanneer de aggregatie gemaakt is -->
+			<elem tag="dcterms:issued" attrs="xml:lang, rdf:datatype"/>
+			<!-- MAIS Wijzigingsdatum -->
+			<elem tag="dcterms:modified" attrs="rdf:resource,xml:lang,rdf:datatype"/>
+			<!-- 20181005 GK. Toegevoegd dcat dataset properties -->
+			<elem tag="dcat:keyword" attrs="rdf:resource,xml:lang"/>
+			<elem tag="dcat:landingPage" attrs="rdf:resource,xml:lang"/>
+			<elem tag="dc:coverage" attrs="rdf:resource,xml:lang"/>
+			<elem tag="dc:creator" attrs="rdf:resource,xml:lang"/>
+			<elem tag="dc:date" attrs="rdf:resource,xml:lang"/>
+			<elem tag="dc:language"/>
+			<elem tag="dc:publisher" attrs="rdf:resource,xml:lang"/>
+		<!-- Toegevoegd 20181001 GK gebruiken van ore:aggregation voor fotocollectie als geheel -->
     </elem>
-<!-- ens - ore:Aggregation - niet gebruiken of weghalen -->
+    <!-- ens - ore:Aggregation -->
 
 <!-- start elem - NL-HaNA_Aggregation -->
     <elem tag="naa:NL-HaNA_Aggregation">
