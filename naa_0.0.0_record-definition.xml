@@ -12,6 +12,7 @@
     	<namespace prefix="dbo" uri="http://dbpedia.org/ontology/"/>
     	<namespace prefix="edm" uri="http://www.europeana.eu/schemas/edm/"/>
     	<namespace prefix="naa" uri="http://archief.nl/def/"/>
+		<namespace prefix="pnv" uri="http://archief.nl/pnv/def/"/>
     	<namespace prefix="ore" uri="http://www.openarchives.org/ore/terms/"/>
     	<namespace prefix="org" uri="http://www.w3.org/ns/org#"/>
     	<namespace prefix="owl" uri="http://www.w3.org/2002/07/owl#"/>
@@ -427,8 +428,8 @@
       	<!-- Record 0 alleen PhotoCollection en daarboven PhotoRecord -->
         	<node-mapping inputPath="/input" outputPath="/naa:RDF/naa:RecordAggregation/@rdf:about">
 		    <groovy-code>
-				<string>if ((_input.dcidentifierahdid_ == &quot;&quot; &amp;&amp; _input.ahdid_ == &quot;&quot;)) {</string>
-					<string>if (_input.dcidentifierarchiefinventaris_) {</string>
+				<string>if ((_input.dcidentifierahdid_ == &quot;&quot; )) {</string>
+					<string>if (_input.dcidentifierbestandsdeelnummer_) {</string>
 						<string>&quot;${baseUrl}/${orgId}/doc/PhotoCollection:${_uniqueIdentifier.sanitizeURI()}&quot;</string>
 					<string>} else {</string>
 						<string>&quot;${baseUrl}/${orgId}/doc/NadereToegang:${_uniqueIdentifier.sanitizeURI()}&quot;</string>
@@ -453,7 +454,7 @@
      	<elem tag="dc:title" attrs="xml:lang"/>
         <node-mapping inputPath="/facts/name" outputPath="/naa:RDF/naa:RecordAggregation/dc:title">
       		<groovy-code>
-        		<string>if (_input.dcidentifierahdid_ == &quot;&quot; &amp;&amp; _input.ahdid_ == &quot;&quot;)</string>
+        		<string>if (_input.dcidentifierahdid_ == &quot;&quot;)</string>
         		<string>&quot;${_name}&quot;</string>
       		</groovy-code>
 		</node-mapping>
@@ -509,7 +510,7 @@
         <!--20181019 GK Toegevoegd voor Handle-->
         <elem tag="naa:persistentIdentifier" attrs="rdf:resource,xml:lang"/>
         <!--20181019 GK Toegevoegd om te verwijzen vanuit foto naar zichtexemplaar-->
-					
+
         <elem tag="edm:hasView" attrs="rdf:resource"/>
         <!-- NOG IN TE VULLEN -->
         <elem tag="ore:isAggregatedBy" attrs="rdf:resource"/>
@@ -778,26 +779,20 @@
       	<elem tag="dc:date" attrs="rdf:resource,xml:lang"/>
       	<elem tag="dc:language"/>
       	<elem tag="dc:publisher" attrs="rdf:resource,xml:lang"/>
-      	<elem tag="dc:rights" attrs="rdf:resource,xml:lang"/>
     </elem>
     <!-- end elem - Dataset -->
-
 </root>
 <!-- END - root -->
-
 <field-markers/>
 <opts/>
-
 <docs>
-<!-- start Tekst en uitleg - HaNA_Aggregation -->
+    <!-- start Tekst en uitleg - HaNA_Aggregation -->
   <doc path="/naa:RDF/ore:Aggregation">
     <para name="Label">ore:Aggregation</para>
     <para name="Definition">ore:Aggregation komt mogelijk te vervallen en wordt niet in de nieuwe record definitions niet meer gebruikt. RecordAggregation is het startpunt van de mapping en hard aan Pockets gekoppeld.</para>
   </doc>
-
-<!-- Start van de tekst en uitleg per onderdeel -->
-
-<!-- Start tekst en uitleg - HaNA_Aggregation -->
+  <!-- Start van de tekst en uitleg per onderdeel -->
+  <!-- Start tekst en uitleg - HaNA_Aggregation -->
   <doc path="/naa:RDF/naa:RecordAggregation">
     <para name="Label">RecordAggregation</para>
     <para name="Definition">Ter vervanging van ore:Aggregation. Dit is de start van de record definitie/mapping en hard aan Pockets gekoppeld.</para>
@@ -826,10 +821,6 @@
     <para name="Label"> nog in te vullen </para>
     <para name="Note"></para>
   </doc>
-  <doc path="/naa:RDF/naa:RecordAggregation/edm:hasView">
-    <para name="Label"> nog in te vullen </para>
-    <para name="Note"></para>
-  </doc>
   <doc path="/naa:RDF/naa:RecordAggregation/edm:landingPage">
     <para name="Label">MAIS geeft hier een 1 of 0 maar dt zou een URL of URI moeten zijn - dcterms:hasPart.webdisplay</para>
     <para name="Note"></para>
@@ -855,8 +846,6 @@
     <para name="Note"></para>
   </doc>
 <!-- Einde tekst en uitleg - HaNA_Aggregation -->
-
-
 <!-- Start tekst en uitleg - ArchivalEntity -->
   <doc path="/naa:RDF/naa:ArchivalEntity">
     <para name="Label">ArchivalEntity</para>
@@ -892,10 +881,6 @@
     <para name="Label">MAIS bestanddeelnummer</para>
     <para name="Note"></para>
   </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/naa:findingAidNumber">
-    <para name="Label">Nummer archiefinventaris zie ook naa:catalogReferenceNumber</para>
-    <para name="Note"></para>
-  </doc>
   <doc path="/naa:RDF/naa:ArchivalEntity/naa:inventoryNumber">
     <para name="Label">MAIS inventarisnummer</para>
     <para name="Note"></para>
@@ -916,32 +901,32 @@
     <para name="Label">Extra beschrijving indien beschikbaar - dc:description.annotatie</para>
     <para name="Note"></para>
   </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/dc:subject">
-    <para name="Label">MAIS Trefwoorden: algemeen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/dcterms:subject">
-    <para name="Label">Nog in te vullen - mogelijk een constant of vaste input</para>
-    <para name="Note">MAIS Relaties:thesaurusterm algemeen. Als object van dcterms:subject, bijvoorbeeld de GTAA thesaurus: data.beeldengeluid.nl/gtaa/217385</para>
-    <para name="Note2">MAIS Relaties: thesaurus persoon. Als object van dcterms:subject of als verwijzing in naa:PersonEntity met owl:seeAlso data.beeldengeluid.nl/gtaa/xxxxx</para>
-    <para name="Note3">MAIS Relaties:geografische term. Als object van dcterms:subject of als verwijzing in hg:PlaceInTime met owl:seeAlso data.beeldengeluid.nl/gtaa/xxxx</para>
-  </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/foaf:primaryTopic">
-    <para name="Label">Nog in te vullen - </para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/dc:coverage">
-    <para name="Label">MAIS Lokatie in Beschrijven (bijvoorbeeld Frankrijk)</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/dcterms:coverage">
-    <para name="Label">MAIS Relaties:geografische term. Verwijzing naar een gecontrolleerde geo thesaurus zoals de GTAA</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/dcterms:temporal">
-    <para name="Label">MAIS Relaties:geografische term. Verwijzing naar een gecontrolleerde geo thesaurus zoals de GTAA</para>
-    <para name="Note"></para>
-  </doc>
+  <!--<doc path="/naa:RDF/naa:ArchivalEntity/dc:subject">-->
+    <!--<para name="Label">MAIS Trefwoorden: algemeen</para>-->
+    <!--<para name="Note"></para>-->
+  <!--</doc>-->
+  <!--<doc path="/naa:RDF/naa:ArchivalEntity/dcterms:subject">-->
+    <!--<para name="Label">Nog in te vullen - mogelijk een constant of vaste input</para>-->
+    <!--<para name="Note">MAIS Relaties:thesaurusterm algemeen. Als object van dcterms:subject, bijvoorbeeld de GTAA thesaurus: data.beeldengeluid.nl/gtaa/217385</para>-->
+    <!--<para name="Note2">MAIS Relaties: thesaurus persoon. Als object van dcterms:subject of als verwijzing in naa:PersonEntity met owl:seeAlso data.beeldengeluid.nl/gtaa/xxxxx</para>-->
+    <!--<para name="Note3">MAIS Relaties:geografische term. Als object van dcterms:subject of als verwijzing in hg:PlaceInTime met owl:seeAlso data.beeldengeluid.nl/gtaa/xxxx</para>-->
+  <!--</doc>-->
+  <!--<doc path="/naa:RDF/naa:ArchivalEntity/foaf:primaryTopic">-->
+    <!--<para name="Label">Nog in te vullen - </para>-->
+    <!--<para name="Note"></para>-->
+  <!--</doc>-->
+  <!--<doc path="/naa:RDF/naa:ArchivalEntity/dc:coverage">-->
+    <!--<para name="Label">MAIS Lokatie in Beschrijven (bijvoorbeeld Frankrijk)</para>-->
+    <!--<para name="Note"></para>-->
+  <!--</doc>-->
+  <!--<doc path="/naa:RDF/naa:ArchivalEntity/dcterms:coverage">-->
+    <!--<para name="Label">MAIS Relaties:geografische term. Verwijzing naar een gecontrolleerde geo thesaurus zoals de GTAA</para>-->
+    <!--<para name="Note"></para>-->
+  <!--</doc>-->
+  <!--<doc path="/naa:RDF/naa:ArchivalEntity/dcterms:temporal">-->
+    <!--<para name="Label">MAIS Relaties:geografische term. Verwijzing naar een gecontrolleerde geo thesaurus zoals de GTAA</para>-->
+    <!--<para name="Note"></para>-->
+  <!--</doc>-->
   <doc path="/naa:RDF/naa:ArchivalEntity/dc:relation">
     <para name="Label">MAIS Verwijzing</para>
     <para name="Note"></para>
@@ -970,17 +955,7 @@
     <para name="Label">MAIS Informatie aanbieder beschrijving. Verwijzing naar de organisatie die verantwoordelijk is voor het publiceren. Gebruik bij voorkeur een gecontrolleerde term bv. rijksarchief.overheid.nl/NL-HaNA/organisatie/id/NationaalArchief</para>
     <para name="Note"></para>
   </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/dcterms:rightsHolder">
-    <para name="Label">MAIS Auteursrechthouder. Gebruik bij voorkeur een gecontrolleerde term zoals rijksarchief.overheid.nl/NL-HaNA/organisatie/id/NationaalArchief</para>
-    <para name="Note">Opmerking: komt ook voor als onderdeel van compositie (blank node) dcterms:accessRights</para>
-  </doc>
-  <doc path="/naa:RDF/naa:ArchivalEntity/dcterms:rights">
-    <para name="Label">MAIS Rechten arn weergave levering of andere velden.</para>
-    <para name="Note">Opmerking: rechten model moet nog worden gladgestreken in bronsysteem</para>
-  </doc>
 <!-- Einde tekst en uitleg - ArchivalEntity -->
-
-
 <!-- Start tekst en uitleg - ArchivalReference -->
   <doc path="/naa:RDF/naa:ArchivalReference">
     <para name="Label">ArchivalReference</para>
@@ -1005,8 +980,6 @@
     <para name="Note"></para>
   </doc>
 <!-- Einde tekst en uitleg - ArchivalReference -->
-
-
 <!-- Start tekst en uitleg - WebResource -->
   <doc path="/naa:RDF/edm:WebResource">
     <para name="Label">WebResource</para>
@@ -1015,14 +988,6 @@
     <para name="Voorbeeld">Voorbeeld nog in te vullen</para>
   </doc>
   <doc path="/naa:RDF/edm:WebResource/rdfs:label">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/edm:WebResource/skos:prefLabel">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/edm:WebResource/skos:altLabel">
     <para name="Label">Indien mogelijk een label toewijzen</para>
     <para name="Note"></para>
   </doc>
@@ -1037,11 +1002,6 @@
   <doc path="/naa:RDF/edm:WebResource/dc:format">
     <para name="Label">Metadata over formaat / specificatie (MAM). Bijvoorbeeld: image/jpeg</para>
     <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/edm:WebResource/dc:rights">
-    <para name="Label">Rechten mbt zichtexemplaar / digitaal object. Volgens EDM:</para>
-    <para name="Note1">Gebruik indien mogelijk de naam van de rechthebbende van deze digitale weergave of voor meer algemene rechteninformatie.</para>
-    <para name="Note2">Let op het verschil tussen deze eigenschap en de verplichte, gecontroleerde edm: rights -eigenschap hieronder.</para>
   </doc>
   <doc path="/naa:RDF/edm:WebResource/dc:source">
     <para name="Label">Volgens EDM: Een verwante bron waaruit de webresource geheel of gedeeltelijk is afgeleid.</para>
@@ -1064,58 +1024,18 @@
     <para name="Note"></para>
   </doc>
 <!-- Einde tekst en uitleg - WebResource -->
-
-
 <!-- Start tekst en uitleg - PersonEntity -->
-  <doc path="/naa:RDF/naa:PersonEntity">
-    <para name="Label">PersonEntity</para>
+<doc path="/naa:RDF/pnv:Person">
+    <para name="Label">Person</para>
     <para name="Definition">Nog aan te vullen</para>
     <para name="Verplichting en voorkomen">Is het veld verplicht en hoeveel mag hij voorkomen.</para>
     <para name="Voorbeeld">Voorbeeld nog in te vullen</para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/rdfs:label">
+</doc>
+<doc path="/naa:RDF/pnv:Person/rdfs:label">
     <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/skos:prefLabel">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/skos:altLabel">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/naa:lastKnownName">
-    <para name="Label">MAIS Trefwoorden: namen. Indien dit veld aanwezig is kan een naa:PersonEntity gemodelleerd worden</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/owl:seeAlso">
-    <para name="Label">Verwijzing naar externe thesaurus zoals GTAA indien de thesaurus over deze persoon gaat of meer informatie heeft</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/owl:sameAs">
-    <para name="Label">Linken naar een andere persoon als deze dezelfde is</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/foaf:made">
-    <para name="Label">Iets wat deze persoon gemaakt heeft</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/ebucore:hasRole">
-    <para name="Label">Toegevoegd om een rol aan te geven zoals een beroep, status of familielid</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/dc:description">
-    <para name="Label">Extra toegevoegd, geen mapping regels vanuit MAIS</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/naa:PersonEntity/skos:note">
-    <para name="Label">Extra toegevoegd, geen mapping regels vanuit MAIS</para>
-    <para name="Note"></para>
-  </doc>
+    <para name="Note"/>
+</doc>
 <!-- Einde tekst en uitleg - PersonEntity -->
-
-
 <!-- Start tekst en uitleg - TimeSpan -->
   <doc path="/naa:RDF/edm:TimeSpan">
     <para name="Label">Catalog</para>
@@ -1152,8 +1072,6 @@
     <para name="Note"></para>
   </doc>
 <!-- Einde tekst en uitleg - TimeSpan -->
-
-
 <!-- Start tekst en uitleg - PlaceInTime -->
   <doc path="/naa:RDF/hg:PlaceInTime">
     <para name="Label">Catalog</para>
@@ -1246,128 +1164,6 @@
     <para name="Note"></para>
   </doc>
 <!-- Einde tekst en uitleg - PlaceInTime -->
-
-
-<!-- Start tekst en uitleg - Catalogus (dcat:Catalog) -->
-  <doc path="/naa:RDF/dcat:Catalog">
-    <para name="Label">Catalog (dcat:Catalog)</para>
-    <para name="Definition">Nog aan te vullen</para>
-    <para name="Verplichting en voorkomen">Is het veld verplicht en hoeveel mag hij voorkomen.</para>
-    <para name="Voorbeeld">Voorbeeld nog in te vullen</para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/rdfs:label">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/skos:prefLabel">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/skos:altLabel">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcterms:title">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcterms:description">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcterms:issued">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcterms:spatial">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcterms:modified">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcat:themeTaxonomy">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcterms:license">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/foaf:homepage">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcat:dataset">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcat:record">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dc:language">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dc:publisher">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dcterms:creator">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:Catalog/dc:rights">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-<!-- Einde tekst en uitleg - Catalogus -->
-
-
-<!-- Start tekst en uitleg - CatalogRecord -->
-  <doc path="/naa:RDF/dcat:CatalogRecord">
-    <para name="Label">CatalogRecord</para>
-    <para name="Definition">Nog aan te vullen</para>
-    <para name="Obligation and Occurrence">Nog aan te vullen</para>
-    <para name="Voorbeeld">Voorbeeld nog in te vullen</para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/rdfs:label">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/skos:prefLabel">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/skos:altLabel">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/dcterms:title">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/dcterms:description">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/foaf:primaryTopic">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/dcterms:issued">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-  <doc path="/naa:RDF/dcat:CatalogRecord/dcterms:modified">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
-<!-- Einde tekst en uitleg - CatalogRecord -->
-
-
 <!-- Start tekst en uitleg - Dataset -->
   <doc path="/naa:RDF/dcat:Dataset">
     <para name="Label">Dataset</para>
@@ -1436,13 +1232,7 @@
     <para name="Label">Indien mogelijk een label toewijzen</para>
     <para name="Note"></para>
   </doc>
-  <doc path="/naa:RDF/dcat:Dataset/dc:rights">
-    <para name="Label">Indien mogelijk een label toewijzen</para>
-    <para name="Note"></para>
-  </doc>
 <!-- Einde tekst en uitleg - Dataset -->
-
-
 <!-- Onderstaande laat ik als voorbeeld in de record definition staan -->
   <!--
   <doc path="/naa:RDF/naa:Persoon/wie:hasName">
@@ -1466,5 +1256,7 @@
   </doc>
   -->
 </docs>
-<!-- Laatste revisie - 17 mei 2018 - NT/Beeld switch aangepast -->
+	<!-- Revisie - 17 mei 2018 - NT/Beeld switch aangepast -->
+	<!-- Revisie - 07 juni 2018 - diverse wijigingen bijv uitbreiding ordl -->
+	<!-- Revisie - 08 juni 2018 - diverse wijigingen en nieuwe mapping -->
 </record-definition>
