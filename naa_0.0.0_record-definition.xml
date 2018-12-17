@@ -8,11 +8,10 @@
     	<namespace prefix="hg" uri="http://rdf.histograph.io/"/>
     	<namespace prefix="sd" uri="http://www.w3.org/ns/sparql-service-description#"/>
     	<namespace prefix="vs" uri="http://www.w3.org/2003/06/sw-vocab-status/ns#"/>
-    	<namespace prefix="bgn" uri="http://biographynet.nl/schema/"/>
     	<namespace prefix="dbo" uri="http://dbpedia.org/ontology/"/>
     	<namespace prefix="edm" uri="http://www.europeana.eu/schemas/edm/"/>
     	<namespace prefix="naa" uri="http://archief.nl/def/"/>
-		<namespace prefix="pnv" uri="http://archief.nl/pnv/def/"/>
+		<namespace prefix="pnv" uri="https://w3id.org/pnv/"/>
     	<namespace prefix="ore" uri="http://www.openarchives.org/ore/terms/"/>
     	<namespace prefix="org" uri="http://www.w3.org/ns/org#"/>
     	<namespace prefix="owl" uri="http://www.w3.org/2002/07/owl#"/>
