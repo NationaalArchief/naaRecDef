@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<record-definition prefix="naa" version="0.0.5" flat="false">
+<record-definition prefix="naa" version="0.0.0" flat="false">
 	<namespaces>
     	<namespace prefix="bf" uri="http://id.loc.gov/ontologies/bibframe/"/>
     	<namespace prefix="cs" uri="http://www.kulttuurisampo.fi/ebkr/"/>
@@ -38,6 +38,8 @@
     	<namespace prefix="cidoc-crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
     	<namespace prefix="frbr_core" uri="http://purl.org/vocab/frbr/core#"/>
 		<namespace prefix="odrl" uri="http://www.w3.org/ns/odrl/2/"/>
+		<namespace prefix="adms" uri="http://www.w3.org/ns/adms#"/>
+		<namespace prefix="ov" uri="http://open.vocab.org/terms/"/>
   	</namespaces>
 	<functions>
 		<mapping-function name="createOreAggregationUri">
@@ -408,16 +410,19 @@
 			<elem tag="ore:aggregates" attrs="rdf:resource"/>
 			<!-- Wanneer de aggregatie gemaakt is -->
 			<elem tag="dcterms:issued" attrs="xml:lang, rdf:datatype"/>
+			<elem tag="dcterms:relation" attrs="rdf:resource,xml:lang"/>
 			<!-- MAIS Wijzigingsdatum -->
 			<elem tag="dcterms:modified" attrs="rdf:resource,xml:lang,rdf:datatype"/>
 			<!-- 20181005 GK. Toegevoegd dcat dataset properties -->
 			<elem tag="dcat:keyword" attrs="rdf:resource,xml:lang"/>
 			<elem tag="dcat:landingPage" attrs="rdf:resource,xml:lang"/>
-			<elem tag="dc:coverage" attrs="rdf:resource,xml:lang"/>
 			<elem tag="dc:creator" attrs="rdf:resource,xml:lang"/>
+			<elem tag="dcterms:creator" attrs="rdf:resource,xml:lang,rdf:datatype"/>			
 			<elem tag="dc:date" attrs="rdf:resource,xml:lang"/>
 			<elem tag="dc:language"/>
 			<elem tag="dc:publisher" attrs="rdf:resource,xml:lang"/>
+			<elem tag="dcterms:publisher" attrs="rdf:resource,xml:lang,rdf:datatype"/>						
+            <elem tag="dcterms:coverage" attrs="rdf:resource"/>
 		<!-- Toegevoegd 20181001 GK gebruiken van ore:aggregation voor fotocollectie als geheel -->
     </elem>
     <!-- ens - ore:Aggregation -->
@@ -523,7 +528,7 @@
         <elem tag="dc:date" attrs="xml:lang,rdf:datatype"/>
         <!-- start nesting - dcterms:relation -->
         <elem tag="dcterms:date" attrs="xml:lang, rdf:datatype"/>
-        <elem tag="dcterms:relation" attrs="rdf:about"/>
+        <elem tag="dcterms:relation" attrs="rdf:resource,xml:lang"/>
         <!-- MAIS Publicatie, al eerder verschenen bijvoorbeeld in Elsevier Wereldkroniek. -->
         <elem tag="bf:otherEdition" attrs="xml:lang"/>
         <!-- MAIS Informatie aanbieder beschrijving -->
@@ -544,6 +549,10 @@
         <elem tag="odrl:hasPolicy" attrs="rdf:resource"/>
         <!-- Eventuele Opmerkingen -->
         <elem tag="skos:note" attrs="xml:lang"/>
+        <!-- MAIS Begindatum (bijvoorbeeld 0000-00-00) -->
+        <elem tag="edm:begin" attrs="xml:lang"/>
+        <!-- MAIS Einddatum (bijvoorbeeld 0000-00-00) -->
+        <elem tag="edm:end" attrs="xml:lang"/>
     </elem>
     <!-- end elem - ArchivalEntity -->
 
@@ -562,6 +571,8 @@
         <!-- The primary topic of this aggregation, record or document. -->
         <elem tag="foaf:primaryTopic" attrs="rdf:about"/>
         <elem tag="dc:description" attrs="xml:lang"/>
+        <!-- GK 20181023 The subject is a document that, to any extent, describes the object tbv. rechtzaken i.h.b. nt00306 -->
+        <elem tag="ov:describes" attrs="rdf:resource,xml:lang"/>
         <!-- Extra beschrijving indien beschikbaar -->
         <elem tag="naa:additionalDescription" attrs="xml:lang"/>
         <!-- MAIS Trefwoorden: algemeen -->
@@ -607,6 +618,8 @@
         <!-- end Tijdsaanduiding -->
         <!-- Borderelnummer toegevoegd voor nt00341 -->
         <elem tag="naa:docketRecordNumber" attrs="xml:lang"/>
+        <!-- GK 20181101 voor verwijzing naar archiefstuk. Toegevoegd in recorddef 0.08 -->
+        <elem tag="naa:archiveLink" attrs="xml:lang"/>
     </elem>
     <!-- end elem - ArchivalReference -->
     <!-- start elem - WebResource -->
@@ -709,6 +722,16 @@
 		<elem tag="edm:end" attrs="xml:lang"/>
 	</elem>
     <!-- end TimeSpan zonder nesting -->
+    <!-- 20181105 GK toegevoegd n.a.v. NT00306 voor instanties zoals Hoge Raad -->		
+    <elem tag="org:FormalOrganization" attrs="rdf:about">
+        <elem tag="dc:identifier" attrs="xml:lang"/>
+        <!-- Indien mogelijk een label toewijzen -->
+        <elem tag="rdfs:label" attrs="xml:lang"/>
+        <elem tag="skos:prefLabel" attrs="xml:lang"/>
+        <elem tag="skos:altLabel" attrs="xml:lang"/>			
+        <elem tag="skos:note" attrs="xml:lang"/>
+        <elem tag="adms:relatedWebpage" attrs="rdf:resource,xml:lang"/>
+    </elem>		
     <!-- start PlaceInTime -->
 	<elem tag="hg:PlaceInTime" attrs="rdf:about">
         <!-- GK 20180928 Toegevoegd type -->
