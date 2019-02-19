@@ -456,12 +456,6 @@
 		<elem tag="skos:altLabel" attrs="xml:lang"/>
       	<!-- Titel van de collectie -->
      	<elem tag="dc:title" attrs="xml:lang"/>
-        <node-mapping inputPath="/facts/name" outputPath="/naa:RDF/naa:RecordAggregation/dc:title">
-      		<groovy-code>
-        		<string>if (_input.dcidentifierahdid_ == &quot;&quot;)</string>
-        		<string>&quot;${_name}&quot;</string>
-      		</groovy-code>
-		</node-mapping>
         <!-- MAIS toegangscode / nummer archiefinventaris / toegangsnummer-->
         <elem tag="naa:catalogReferenceNumber" attrs="xml:lang"/>
         <!-- guid MAIS -->
@@ -703,6 +697,10 @@
         </elem>
         <elem tag="naa:hasResidency" attrs="rdf:resource,xml:lang"/>
         <elem tag="naa:wasOwnedBy" attrs="rdf:resource,xml:lang"/>
+		<!-- 20190125 FN This property associates the people, things or information resources with an event at which they were present -->
+		<elem tag="edm:wasPresentAt" attrs="rdf:resource"/>	
+		<!-- 20190125 FN edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of “meetings” between people and other things in space-time. Therefore we name this relationship as the things the object “has met” in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role. -->
+		<elem tag="edm:hasMet" attrs="rdf:resource"/>			
     </elem>
     <!-- end - Person -->
     <!-- start TimeSpan zonder nesting-->
@@ -776,7 +774,7 @@
         <elem tag="rdfs:label" attrs="xml:lang"/>
         <elem tag="skos:prefLabel" attrs="xml:lang"/>
         <elem tag="skos:altLabel" attrs="xml:lang"/>
-        <elem tag="skos:inScheme" attrs="rdf:about"/>
+        <elem tag="skos:inScheme" attrs="rdf:resource,xml:lang"/>
         <!-- Linken naar andere concept dat hetzelfde is -->
         <elem tag="owl:sameAs" attrs="rdf:resource"/>
         <!-- Linken naar een concept dat er op lijkt -->
@@ -803,6 +801,38 @@
       	<elem tag="dc:publisher" attrs="rdf:resource,xml:lang"/>
     </elem>
     <!-- end elem - Dataset -->
+    <!-- 20190125 FN naa:Voyage zonder nesting-->
+	<elem tag="naa:Voyage" attrs="rdf:about">	
+		<!-- Indien mogelijk een label toewijzen -->
+		<elem tag="rdfs:label" attrs="xml:lang"/>
+		<elem tag="skos:prefLabel" attrs="xml:lang"/>
+		<elem tag="skos:altLabel" attrs="xml:lang"/>
+		<!-- Plaats van aankomst/bestemming-->
+		<elem tag="naa:placeOfArrival" attrs="rdf:resource"/>
+		<!-- Plaats van vertrek-->
+		<elem tag="naa:placeOfDeparture" attrs="rdf:resource"/>	
+		<!-- Lading die op de reis wordt meegevoerd -->
+		<elem tag="naa:hasCargo" attrs="rdf:resource"/>	
+		<!-- This property associates the people, things or information resources with an event at which they were present -->
+		<elem tag="edm:wasPresentAt" attrs="rdf:resource"/>			
+	</elem>
+    <!-- end naa:Voyage zonder nesting -->  
+    <!-- 20190125 FN edm:Event zonder nesting-->
+	<elem tag="edm:Event" attrs="rdf:about">	
+		<!-- Indien mogelijk een label toewijzen -->
+		<elem tag="rdfs:label" attrs="xml:lang"/>
+		<elem tag="skos:prefLabel" attrs="xml:lang"/>
+		<elem tag="skos:altLabel" attrs="xml:lang"/>
+        <elem tag="dc:date" attrs="xml:lang,rdf:datatype"/>
+        <elem tag="dcterms:date" attrs="xml:lang, rdf:datatype"/>
+		<!-- This property associates an event with the place at which the event happened. -->
+		<elem tag="edm:happendAt" attrs="rdf:resource"/>	
+		<!-- This property associates an event to the smallest known time span that overlaps with the occurrence of that event -->
+		<elem tag="edm:occuredAt" attrs="rdf:resource"/>	
+		<!-- This property associates the people, things or information resources with an event at which they were present -->
+		<elem tag="edm:wasPresentAt" attrs="rdf:resource"/>			
+	</elem>
+    <!-- end edm:Event zonder nesting --> 	
 </root>
 <!-- END - root -->
 <field-markers/>
