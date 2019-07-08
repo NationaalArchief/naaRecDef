@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<record-definition prefix="naa" version="0.0.0" flat="false">
+<record-definition prefix="naa" version="0.0.11" flat="false">
 	<namespaces>
     	<namespace prefix="bf" uri="http://id.loc.gov/ontologies/bibframe/"/>
     	<namespace prefix="cs" uri="http://www.kulttuurisampo.fi/ebkr/"/>
