@@ -1,3 +1,3 @@
 # naaRecDef
 
-Record Definition for the Fotocollection
+Record Definition Fotocollectie Nationaal Archief
